@@ -1,6 +1,6 @@
 package com.demo.interest_calculator.controller;
 
-import com.demo.interest_calculator.model.Calculator;
+import com.demo.interest_calculator.entity.Calculator;
 import com.demo.interest_calculator.service.InterestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class InterestController {
 	}
 
 	@PostMapping("/calculator")
-	public String Calculator(@ModelAttribute Calculator calculator,
+	public String calculator(@ModelAttribute Calculator calculator,
 							 Model model){
 
 		Float amount = calculator.getAmount();
@@ -47,12 +47,14 @@ public class InterestController {
 		double	totalLoanAmount = totalInterestAmount + amount;
 
 		BigDecimal number = new BigDecimal(totalInterestAmount);
-		BigDecimal roundedNumber = number.setScale(2, RoundingMode.HALF_UP);
+		BigDecimal roundedInterestNumber = number.setScale(2, RoundingMode.HALF_UP);
+		calculator.setInterestAmount(roundedInterestNumber);
 
 		BigDecimal loanAmount = new BigDecimal (totalLoanAmount);
 		BigDecimal roundedLoanNumber = loanAmount.setScale(2, RoundingMode.HALF_UP);
+		calculator.setLoanAmount(roundedLoanNumber);
 
-		model.addAttribute("totalInterestAmount", roundedNumber);
+		model.addAttribute("totalInterestAmount", roundedInterestNumber);
 		model.addAttribute("totalLoanAmount", roundedLoanNumber);
 		model.addAttribute("calculator", calculator);
 
@@ -69,24 +71,26 @@ public class InterestController {
 	private static double getTotalInterestAmount(Calculator calculator, Float amount) {
 		Float interest = (calculator.getInterest() / 100);
 		Integer months = calculator.getMonths();
-		String loan = calculator.getLoanAmount();
-		String totalInterest = calculator.getInterestAmount();
 
 //	Calculate the total Interest amount
 		float firstFraction = (amount * months * interest) / MONTHS_OF_YEAR;
 		double numerator =  pow((1 + (interest / MONTHS_OF_YEAR)), months);
 		double secondFraction = (numerator / (numerator -1));
-		double totalInterestAmount = (firstFraction * secondFraction) - amount;
-		return totalInterestAmount;
+		double totalLoanAmount = (firstFraction * secondFraction) - amount;
+		return totalLoanAmount;
 	}
 
 	@PostMapping("/saveLoanInfo")
-	public String saveLoanInfo(@ModelAttribute("calculator") Calculator calculator){
+	public String saveLoanInfo(@ModelAttribute("calculator") Calculator calculator, Model model){
 		try {
 			interestService.save(calculator);
-			System.out.println(calculator);
+			System.out.println(calculator.getLoanAmount());
+			System.out.println(calculator.getInterestAmount());
 
-			return "redirect:/success";
+
+			model.addAttribute("success", calculator);
+
+			return "success";
 		} catch (JpaSystemException e) {
 			log.error("Data integrity violation: ", e);
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,

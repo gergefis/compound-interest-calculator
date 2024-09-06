@@ -1,6 +1,6 @@
 package com.demo.interest_calculator.service;
 
-import com.demo.interest_calculator.model.Calculator;
+import com.demo.interest_calculator.entity.Calculator;
 import com.demo.interest_calculator.repository.InterestRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

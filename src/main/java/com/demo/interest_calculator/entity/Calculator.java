@@ -1,10 +1,12 @@
-package com.demo.interest_calculator.model;
+package com.demo.interest_calculator.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Entity
 @NoArgsConstructor
@@ -26,10 +28,10 @@ public class Calculator {
 	private Integer months;
 
 	@Column(name="offers_name")
-	private String offersName;
+	private String offerName;
 	@Column(name="loan_amount")
-	private String loanAmount;
+	private BigDecimal loanAmount;
 	@Column(name="interest_amount")
-	private String interestAmount;
+	private BigDecimal interestAmount;
 }
 
