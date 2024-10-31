@@ -15,6 +15,7 @@ public class InterestServiceImpl implements InterestService {
 
 	@Override
 	public void save(Calculator calculator) {
+
 		interestRepository.save(calculator);
 	}
 }
