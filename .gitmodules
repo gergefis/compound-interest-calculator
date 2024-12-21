@@ -1,0 +1,6 @@
+[submodule "backend-interest-calculator"]
+	path = backend-interest-calculator
+	url = https://github.com/gergefis/backend-interest-calculator.git
+[submodule "frontend-interest-calculator"]
+	path = frontend-interest-calculator
+	url = https://github.com/gergefis/frontend-interest-calculator.git
